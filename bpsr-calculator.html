@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <title>bpsr-calculator</title>
+  <link rel="stylesheet" href="bpsr-calculator.css">
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div class="title-block">
+        <h1>bpsr-calculator</h1>
+      </div>
+      <div class="actions">
+        <button id="exportConfig" type="button">导出 JSON</button>
+        <button id="importConfig" type="button">导入 JSON</button>
+        <button id="resetDefaults" class="danger" type="button">重置默认</button>
+      </div>
+    </header>
+
+    <section class="layout">
+      <div class="panel input-panel">
+        <div class="panel-header">
+          <h2>属性输入</h2>
+          <span id="saveStatus" class="status">未保存</span>
+        </div>
+        <div class="panel-body">
+          <div class="control-row">
+            <div class="field">
+              <label for="seasonSelect">赛季</label>
+              <select id="seasonSelect">
+                <option value="1">第一赛季</option>
+                <option value="2">第二赛季</option>
+                <option value="3">第三赛季</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>伤害类型</label>
+              <div class="segmented" id="resistanceButtons">
+                <button type="button" data-resistance="0.7">物理</button>
+                <button type="button" data-resistance="0.92">魔法</button>
+              </div>
+            </div>
+            <div class="field">
+              <label for="presetSelect">职业流派</label>
+              <select id="presetSelect">
+                <option value="custom">自定义</option>
+                <option value="ice_mage_ice_spear">冰魔导师-冰矛流</option>
+                <option value="ice_mage_ray">冰魔导师-射线流</option>
+                <option value="sharpshooter_beast">神射手-驭兽流</option>
+                <option value="sharpshooter_eagle">神射手-驯鹰流</option>
+                <option value="thunder_swordsman_iai">雷影剑士-居合斩流</option>
+                <option value="thunder_swordsman_moonblade">雷影剑士-月刃召唤流</option>
+                <option value="azure_knight_air">青岚骑士-空战流</option>
+                <option value="azure_knight_heavy">青岚骑士-重装流</option>
+                <option value="forest_speaker_heal">森语者-愈合流</option>
+                <option value="forest_speaker_punish">森语者-惩击流</option>
+                <option value="greatblade_guardian_rockshield">巨刃守护者-岩盾流</option>
+                <option value="greatblade_guardian_block">巨刃守护者-格挡流</option>
+                <option value="shield_knight_guard">神盾骑士-防护回复流</option>
+                <option value="shield_knight_lightshield">神盾骑士-光盾回复流</option>
+                <option value="soul_musician_crazy">灵魂乐手-狂音流</option>
+                <option value="soul_musician_concerto">灵魂乐手-协奏流</option>
+                <option value="flame_berserker_formless">赤炎狂战士-无相专精流</option>
+                <option value="flame_berserker_crimson">赤炎狂战士-赤红专精流</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="inputSections"></div>
+        </div>
+      </div>
+
+      <div class="panel result-panel">
+        <div class="panel-header">
+          <h2>实时结果</h2>
+          <span id="calcStatus" class="status">等待输入</span>
+        </div>
+        <div class="panel-body">
+          <div id="primaryResults" class="result-hero"></div>
+          <div id="panelAttributes" class="panel-attributes"></div>
+        </div>
+      </div>
+
+      <div class="panel equipment-panel">
+        <div class="panel-header">
+          <h2>配装区</h2>
+        </div>
+        <div class="panel-body">
+          <div id="equipmentBuilder" class="equipment-builder"></div>
+        </div>
+      </div>
+
+      <div class="panel custom-panel">
+        <div class="panel-header">
+          <h2>自定义变量</h2>
+          <button id="addCustomInput" type="button">新增变量</button>
+        </div>
+        <div class="panel-body">
+          <div id="customInputs"></div>
+        </div>
+      </div>
+
+      <div class="panel formula-panel">
+        <div class="panel-header">
+          <h2>公式编辑</h2>
+          <button id="addFormula" type="button">新增结果</button>
+        </div>
+        <div class="panel-body editor-grid">
+          <div id="formulaEditor"></div>
+          <details open>
+            <summary>可用变量</summary>
+            <div id="variableList" class="variable-list"></div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <input id="fileInput" class="hidden" type="file" accept="application/json,.json">
+  </main>
+
+  <script src="equipment-reference.js"></script>
+  <script src="bpsr-calculator.js"></script>
+</body>
+</html>
