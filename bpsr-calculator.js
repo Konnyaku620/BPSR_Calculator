@@ -75,14 +75,14 @@ const FIELD_SECTIONS = [
 
 const DERIVED_LABELS = {
   ratingConstant: "暴击/急速/幸运/精通常数",
-  allPowerConstant: "全能常数",
+  versatilityConstant: "全能常数",
   elementConstant: "元素/物魔常数",
-  critPercent: "暴击面板百分比",
-  hastePercent: "急速面板百分比",
-  luckPercent: "幸运面板百分比",
-  masteryPercent: "精通面板百分比",
-  allPowerPercent: "全能转化百分比",
-  allPowerTotal: "全能总百分比",
+  critPct: "暴击面板百分比",
+  hastePct: "急速面板百分比",
+  luckPct: "幸运面板百分比",
+  masteryPct: "精通面板百分比",
+  versatilityPct: "全能转化百分比",
+  versatilityTotal: "全能总百分比",
   singleElementFixedPercent: "单元素固定转百分比",
   allElementFixedPercent: "全元素固定转百分比",
   physMagicFixedPercent: "物魔固定转百分比",
@@ -94,7 +94,7 @@ const DERIVED_LABELS = {
   generalMultiplier: "一般加伤乘区",
   elementBonusTotal: "元素加伤合计",
   elementMultiplier: "元素加伤乘区",
-  allPowerMultiplier: "全能加伤乘区",
+  versatilityMultiplier: "全能加伤乘区",
   critMultiplier: "暴击爆伤期望乘区",
   finalMultiplier: "最终加伤乘区",
   physMagicMultiplier: "物魔增效乘区",
@@ -113,7 +113,7 @@ const DEFAULT_FORMULAS = [
     id: "skillDamage",
     label: "技能伤害",
     format: "number",
-    formula: "skillBase * generalMultiplier * elementMultiplier * allPowerMultiplier * critMultiplier * finalMultiplier * physMagicMultiplier * seasonDamageMultiplier * seasonSuppressMultiplier"
+    formula: "skillBase * generalMultiplier * elementMultiplier * versatilityMultiplier * critMultiplier * finalMultiplier * physMagicMultiplier * seasonDamageMultiplier * seasonSuppressMultiplier"
   },
   {
     id: "luckyExpected",
@@ -146,10 +146,10 @@ const DEFAULT_FORMULAS = [
     formula: "elementMultiplier"
   },
   {
-    id: "allPowerZone",
+    id: "versatilityZone",
     label: "全能乘区",
     format: "multiplier",
-    formula: "allPowerMultiplier"
+    formula: "versatilityMultiplier"
   },
   {
     id: "critZone",
@@ -165,47 +165,66 @@ const PRESETS = {
     damageType: null,
     mainAttribute: null
   },
-  ice_mage_ice_spear: { label: "冰魔导师-冰矛流", damageType: "0.92", mainAttribute: "智力" },
-  ice_mage_ray: { label: "冰魔导师-射线流", damageType: "0.92", mainAttribute: "智力" },
-  sharpshooter_beast: { label: "神射手-驭兽流", damageType: "0.7", mainAttribute: "敏捷" },
-  sharpshooter_eagle: { label: "神射手-驯鹰流", damageType: "0.7", mainAttribute: "敏捷" },
-  thunder_swordsman_iai: { label: "雷影剑士-居合斩流", damageType: "0.7", mainAttribute: "敏捷" },
-  thunder_swordsman_moonblade: { label: "雷影剑士-月刃召唤流", damageType: "0.7", mainAttribute: "敏捷" },
-  azure_knight_air: { label: "青岚骑士-空战流", damageType: "0.7", mainAttribute: "力量" },
-  azure_knight_heavy: { label: "青岚骑士-重装流", damageType: "0.7", mainAttribute: "力量" },
-  forest_speaker_heal: { label: "森语者-愈合流", damageType: "0.92", mainAttribute: "智力" },
-  forest_speaker_punish: { label: "森语者-惩击流", damageType: "0.92", mainAttribute: "智力" },
-  greatblade_guardian_rockshield: { label: "巨刃守护者-岩盾流", damageType: "0.7", mainAttribute: "力量" },
-  greatblade_guardian_block: { label: "巨刃守护者-格挡流", damageType: "0.7", mainAttribute: "力量" },
+  frost_mage_ice_spear: { label: "冰魔导师-冰矛流", damageType: "0.92", mainAttribute: "智力" },
+  frost_mage_ray: { label: "冰魔导师-射线流", damageType: "0.92", mainAttribute: "智力" },
+  marksman_beast: { label: "神射手-驭兽流", damageType: "0.7", mainAttribute: "敏捷" },
+  marksman_eagle: { label: "神射手-驯鹰流", damageType: "0.7", mainAttribute: "敏捷" },
+  stormblade_iai: { label: "雷影剑士-居合斩流", damageType: "0.7", mainAttribute: "敏捷" },
+  stormblade_moonblade: { label: "雷影剑士-月刃召唤流", damageType: "0.7", mainAttribute: "敏捷" },
+  wind_knight_air: { label: "青岚骑士-空战流", damageType: "0.7", mainAttribute: "力量" },
+  wind_knight_heavy: { label: "青岚骑士-重装流", damageType: "0.7", mainAttribute: "力量" },
+  verdant_oracle_heal: { label: "森语者-愈合流", damageType: "0.92", mainAttribute: "智力" },
+  verdant_oracle_punish: { label: "森语者-惩击流", damageType: "0.92", mainAttribute: "智力" },
+  heavy_guardian_rockshield: { label: "巨刃守护者-岩盾流", damageType: "0.7", mainAttribute: "力量" },
+  heavy_guardian_block: { label: "巨刃守护者-格挡流", damageType: "0.7", mainAttribute: "力量" },
   shield_knight_guard: { label: "神盾骑士-防护回复流", damageType: "0.7", mainAttribute: "力量" },
   shield_knight_lightshield: { label: "神盾骑士-光盾回复流", damageType: "0.7", mainAttribute: "力量" },
-  soul_musician_crazy: { label: "灵魂乐手-狂音流", damageType: "0.92", mainAttribute: "智力" },
-  soul_musician_concerto: { label: "灵魂乐手-协奏流", damageType: "0.92", mainAttribute: "智力" },
-  flame_berserker_formless: { label: "赤炎狂战士-无相专精流", damageType: "0.7", mainAttribute: "力量" },
-  flame_berserker_crimson: { label: "赤炎狂战士-赤红专精流", damageType: "0.7", mainAttribute: "力量" }
+  beat_performer_crazy: { label: "灵魂乐手-狂音流", damageType: "0.92", mainAttribute: "智力" },
+  beat_performer_concerto: { label: "灵魂乐手-协奏流", damageType: "0.92", mainAttribute: "智力" },
+  twin_striker_formless: { label: "赤炎狂战士-无相专精流", damageType: "0.7", mainAttribute: "力量" },
+  twin_striker_crimson: { label: "赤炎狂战士-赤红专精流", damageType: "0.7", mainAttribute: "力量" }
+};
+
+const LEGACY_PRESET_KEYS = {
+  ice_mage_ice_spear: "frost_mage_ice_spear",
+  ice_mage_ray: "frost_mage_ray",
+  soul_musician_crazy: "beat_performer_crazy",
+  soul_musician_concerto: "beat_performer_concerto",
+  greatblade_guardian_rockshield: "heavy_guardian_rockshield",
+  greatblade_guardian_block: "heavy_guardian_block",
+  sharpshooter_beast: "marksman_beast",
+  sharpshooter_eagle: "marksman_eagle",
+  thunder_swordsman_iai: "stormblade_iai",
+  thunder_swordsman_moonblade: "stormblade_moonblade",
+  flame_berserker_formless: "twin_striker_formless",
+  flame_berserker_crimson: "twin_striker_crimson",
+  forest_speaker_heal: "verdant_oracle_heal",
+  forest_speaker_punish: "verdant_oracle_punish",
+  azure_knight_air: "wind_knight_air",
+  azure_knight_heavy: "wind_knight_heavy"
 };
 
 const PANEL_AFFIX_ORDER = ["暴击", "急速", "幸运", "精通", "全能"];
 
 const PRESET_RECOMMENDED_AFFIXES = {
-  greatblade_guardian_rockshield: ["精通", "全能"],
-  greatblade_guardian_block: ["幸运", "精通"],
-  thunder_swordsman_iai: ["暴击", "精通"],
-  thunder_swordsman_moonblade: ["急速", "幸运"],
-  azure_knight_heavy: ["急速", "精通"],
-  azure_knight_air: ["暴击", "幸运"],
-  sharpshooter_beast: ["急速", "精通"],
-  sharpshooter_eagle: ["暴击", "急速"],
-  ice_mage_ice_spear: ["暴击", "幸运"],
-  ice_mage_ray: ["急速", "精通"],
-  forest_speaker_punish: ["幸运", "精通"],
-  forest_speaker_heal: ["急速", "精通"],
+  heavy_guardian_rockshield: ["精通", "全能"],
+  heavy_guardian_block: ["幸运", "精通"],
+  stormblade_iai: ["暴击", "精通"],
+  stormblade_moonblade: ["急速", "幸运"],
+  wind_knight_heavy: ["急速", "精通"],
+  wind_knight_air: ["暴击", "幸运"],
+  marksman_beast: ["急速", "精通"],
+  marksman_eagle: ["暴击", "急速"],
+  frost_mage_ice_spear: ["暴击", "幸运"],
+  frost_mage_ray: ["急速", "精通"],
+  verdant_oracle_punish: ["幸运", "精通"],
+  verdant_oracle_heal: ["急速", "精通"],
   shield_knight_guard: ["暴击", "精通"],
   shield_knight_lightshield: ["急速", "精通"],
-  soul_musician_crazy: ["幸运", "急速"],
-  soul_musician_concerto: ["暴击", "急速"],
-  flame_berserker_formless: ["幸运", "精通"],
-  flame_berserker_crimson: ["暴击", "急速"]
+  beat_performer_crazy: ["幸运", "急速"],
+  beat_performer_concerto: ["暴击", "急速"],
+  twin_striker_formless: ["幸运", "精通"],
+  twin_striker_crimson: ["暴击", "急速"]
 };
 
 const FORMATTERS = {
@@ -227,11 +246,11 @@ const FUNCTION_LIBRARY = {
 };
 
 const PANEL_ATTRIBUTES = [
-  { label: "暴击", percentKey: "critPercent", ratingKey: "critRating" },
-  { label: "急速", percentKey: "hastePercent", ratingKey: "hasteRating" },
-  { label: "幸运", percentKey: "luckPercent", ratingKey: "luckRating" },
-  { label: "精通", percentKey: "masteryPercent", ratingKey: "masteryRating" },
-  { label: "全能", percentKey: "allPowerPercent", ratingKey: "allPowerRating" }
+  { label: "暴击", percentKey: "critPct", ratingKey: "crit" },
+  { label: "急速", percentKey: "hastePct", ratingKey: "haste" },
+  { label: "幸运", percentKey: "luckPct", ratingKey: "luck" },
+  { label: "精通", percentKey: "masteryPct", ratingKey: "mastery" },
+  { label: "全能", percentKey: "versatilityPct", ratingKey: "versatility" }
 ];
 
 const EQUIPMENT_REFERENCE = window.BPSR_EQUIPMENT_REFERENCE || {};
@@ -336,11 +355,49 @@ const EQUIPMENT_AFFIX_BLOCKLIST = EQUIPMENT_REFERENCE.affixBlocklist || {};
 const FIXED_VALUE_AFFIX_KEYS = new Set(["majorAffix", "minorAffix", "reforgeAffix"]);
 const RECOMMENDED_MARK = " 👍︎";
 const EQUIPMENT_AFFIX_CONTEXT_MAP = {
-  暴击: { key: "critRating", type: "number" },
-  急速: { key: "hasteRating", type: "number" },
-  幸运: { key: "luckRating", type: "number" },
-  精通: { key: "masteryRating", type: "number" },
-  全能: { key: "allPowerRating", type: "number" }
+  暴击: { key: "crit", type: "number" },
+  急速: { key: "haste", type: "number" },
+  幸运: { key: "luck", type: "number" },
+  精通: { key: "mastery", type: "number" },
+  全能: { key: "versatility", type: "number" }
+};
+const RED_WEAPON_SPECIAL_BY_PRESET = {
+  beat_performer_crazy: "幸运效果伤害+15%",
+  beat_performer_concerto: "暴击治疗+15%",
+  shield_knight_guard: "暴击伤害+15%",
+  shield_knight_lightshield: "近距离伤害+8%",
+  marksman_beast: "远距离伤害+8%",
+  marksman_eagle: "暴击伤害+15%",
+  stormblade_iai: "暴击伤害+15%",
+  stormblade_moonblade: "幸运+6%",
+  verdant_oracle_heal: "治疗强度+5%",
+  verdant_oracle_punish: "远距离伤害+8%",
+  wind_knight_heavy: "近距离伤害+8%",
+  wind_knight_air: "幸运一击倍率+20%",
+  heavy_guardian_rockshield: "护盾强度+8%",
+  heavy_guardian_block: "幸运+6%",
+  frost_mage_ice_spear: "暴击伤害+15%",
+  frost_mage_ray: "远距离伤害+8%"
+};
+const PRESET_ELEMENT_LABEL_BY_PRESET = {
+  frost_mage_ice_spear: "冰元素",
+  frost_mage_ray: "冰元素",
+  shield_knight_guard: "光元素",
+  shield_knight_lightshield: "光元素",
+  marksman_beast: "光元素",
+  marksman_eagle: "光元素",
+  verdant_oracle_heal: "森元素",
+  verdant_oracle_punish: "森元素",
+  heavy_guardian_rockshield: "岩元素",
+  heavy_guardian_block: "岩元素",
+  stormblade_iai: "雷元素",
+  stormblade_moonblade: "雷元素",
+  wind_knight_air: "风元素",
+  wind_knight_heavy: "风元素",
+  beat_performer_crazy: "火元素",
+  beat_performer_concerto: "火元素",
+  twin_striker_formless: "火元素",
+  twin_striker_crimson: "火元素"
 };
 const NO_SET_EQUIPMENT_SLOT_IDS = new Set(["earring", "necklace", "ring", "talisman"]);
 
@@ -422,19 +479,32 @@ equipmentBuilderEl.addEventListener("change", event => {
   const field = select.dataset.equipmentField;
   if (!state.equipment[slot]) return;
 
-  state.equipment[slot][field] = select.multiple
-    ? Array.from(select.selectedOptions).map(option => option.value)
-    : select.value;
+  const equipmentIndex = select.dataset.equipmentIndex;
+  if (equipmentIndex !== undefined) {
+    const values = Array.isArray(state.equipment[slot][field]) ? [...state.equipment[slot][field]] : [];
+    const index = Number(equipmentIndex);
+    values[index] = select.value;
+    if ((index === 0 || index === 1) && values[0] && values[0] === values[1]) {
+      values[index === 0 ? 1 : 0] = "";
+    }
+    state.equipment[slot][field] = values;
+  } else {
+    state.equipment[slot][field] = select.multiple
+      ? Array.from(select.selectedOptions).map(option => option.value)
+      : select.value;
+  }
   normalizeWeaponAffixShape(state.equipment[slot], field);
   normalizeExclusiveEquipmentAffixes(state.equipment[slot], field);
   if (field === "type") {
     const slotConfig = EQUIPMENT_SLOTS.find(item => item.id === slot) || { id: slot };
+    applyRedWeaponSpecialAffix(slotConfig, state.equipment[slot], state.season);
+    applyLowLevelSeaWeaponSpecialAffix(slotConfig, state.equipment[slot]);
     applyUnavailableWeaponAffixes(slotConfig, state.equipment[slot]);
     applyUnavailableSetSpecialAffix(slotConfig, state.equipment[slot]);
     applyRecommendedEquipmentAffixes(state.equipment[slot]);
     normalizeExclusiveEquipmentAffixes(state.equipment[slot], field);
   }
-  if (field === "type" || field === "majorAffix" || field === "minorAffix") {
+  if (field === "type" || field === "majorAffix" || field === "minorAffix" || equipmentIndex !== undefined) {
     renderEquipmentBuilder();
   }
   calculate();
@@ -444,6 +514,7 @@ equipmentBuilderEl.addEventListener("change", event => {
 equipmentBuilderEl.addEventListener("click", event => {
   const toggle = event.target.closest("[data-equipment-multi-toggle]");
   if (toggle) {
+    if (toggle.disabled) return;
     const menu = toggle.nextElementSibling;
     if (menu) {
       menu.classList.toggle("open");
@@ -453,6 +524,7 @@ equipmentBuilderEl.addEventListener("click", event => {
 
   const checkbox = event.target.closest("[data-equipment-multi-option]");
   if (!checkbox) return;
+  if (checkbox.disabled) return;
 
   const slot = checkbox.dataset.equipmentSlot;
   const field = checkbox.dataset.equipmentField;
@@ -583,13 +655,16 @@ function createDefaultState() {
 }
 
 function normalizeState(rawState) {
+  const normalizedFields = migrateLegacyFieldNames(rawState.fields || {});
+  const normalizedSeason = String(rawState.season || "3");
+  const normalizedPreset = normalizePreset(rawState.preset);
   const next = {
     defaultVersion: Number(rawState.defaultVersion) || DEFAULT_VERSION,
-    season: String(rawState.season || "3"),
-    preset: normalizePreset(rawState.preset),
+    season: normalizedSeason,
+    preset: normalizedPreset,
     resistanceMode: rawState.resistanceMode || detectResistanceMode(rawState.fields?.resistanceCoeff ?? 0.7),
-    fields: { ...(rawState.fields || {}) },
-    equipment: normalizeEquipment(rawState.equipment, String(rawState.season || "3")),
+    fields: { ...normalizedFields },
+    equipment: normalizeEquipment(rawState.equipment, normalizedSeason, normalizedPreset),
     customInputs: Array.isArray(rawState.customInputs) ? rawState.customInputs : [],
     formulas: Array.isArray(rawState.formulas) ? rawState.formulas : []
   };
@@ -621,7 +696,7 @@ function normalizeState(rawState) {
     id: sanitizeKey(item.id) || `result${index + 1}`,
     label: item.label || `结果 ${index + 1}`,
     format: ["number", "percent", "multiplier"].includes(item.format) ? item.format : "number",
-    formula: item.formula || "0"
+    formula: migrateLegacyFormulaVariables(item.formula || "0")
   })).filter(item => !isOldDefaultPanelFormula(item));
 
   if (!SEASON_CONSTANTS[next.season]) {
@@ -631,9 +706,49 @@ function normalizeState(rawState) {
   return next;
 }
 
+function migrateLegacyFieldNames(fields) {
+  const next = { ...fields };
+  const pairs = {
+    critRating: "crit",
+    hasteRating: "haste",
+    luckRating: "luck",
+    masteryRating: "mastery",
+    allPowerRating: "versatility",
+    allPowerBonus: "versatilityBonus"
+  };
+
+  Object.entries(pairs).forEach(([oldKey, newKey]) => {
+    if (Object.prototype.hasOwnProperty.call(next, oldKey) && !Object.prototype.hasOwnProperty.call(next, newKey)) {
+      next[newKey] = next[oldKey];
+    }
+    delete next[oldKey];
+  });
+
+  return next;
+}
+
+function migrateLegacyFormulaVariables(formula) {
+  return String(formula || "0")
+    .replace(/\ballPowerConstant\b/g, "versatilityConstant")
+    .replace(/\bcritPercent\b/g, "critPct")
+    .replace(/\bhastePercent\b/g, "hastePct")
+    .replace(/\bluckPercent\b/g, "luckPct")
+    .replace(/\bmasteryPercent\b/g, "masteryPct")
+    .replace(/\ballPowerPercent\b/g, "versatilityPct")
+    .replace(/\ballPowerTotal\b/g, "versatilityTotal")
+    .replace(/\ballPowerMultiplier\b/g, "versatilityMultiplier")
+    .replace(/\bcritRating\b/g, "crit")
+    .replace(/\bhasteRating\b/g, "haste")
+    .replace(/\bluckRating\b/g, "luck")
+    .replace(/\bmasteryRating\b/g, "mastery")
+    .replace(/\ballPowerRating\b/g, "versatility")
+    .replace(/\ballPowerBonus\b/g, "versatilityBonus");
+}
+
 function normalizePreset(value) {
   const text = String(value || "");
-  return Object.prototype.hasOwnProperty.call(PRESETS, text) ? text : "custom";
+  const migrated = LEGACY_PRESET_KEYS[text] || text;
+  return Object.prototype.hasOwnProperty.call(PRESETS, migrated) ? migrated : "custom";
 }
 
 function normalizeFieldSelectValue(field, value) {
@@ -681,7 +796,7 @@ function createDefaultEquipment(season = state?.season || "3") {
   }, {});
 }
 
-function normalizeEquipment(rawEquipment, season = state?.season || "3") {
+function normalizeEquipment(rawEquipment, season = getActiveSeason(), preset = getActivePreset()) {
   const equipment = createDefaultEquipment(season);
   const source = rawEquipment && typeof rawEquipment === "object" ? rawEquipment : {};
 
@@ -689,9 +804,15 @@ function normalizeEquipment(rawEquipment, season = state?.season || "3") {
     const savedRow = source[slot.id] && typeof source[slot.id] === "object" ? source[slot.id] : {};
     EQUIPMENT_COLUMNS.forEach(column => {
       if (isWeaponSpecialColumn(slot, column)) {
-        equipment[slot.id][column.key] = isAdvancedWeaponType(equipment[slot.id].type)
-          ? normalizeEquipmentMultiOptions(column, savedRow[column.key])
-          : normalizeEquipmentSingleOption(column, savedRow[column.key]);
+        if (isSeaWeaponType(equipment[slot.id].type)) {
+          equipment[slot.id][column.key] = isLowLevelSeaWeaponType(equipment[slot.id].type)
+            ? normalizeEquipmentMultiValues(getLowLevelSeaWeaponSpecialOptions(), savedRow[column.key])
+            : normalizeHighLevelSeaWeaponSpecialValues(savedRow[column.key]);
+        } else if (isRedWeaponType(equipment[slot.id].type)) {
+          equipment[slot.id][column.key] = normalizeEquipmentSingleValue(getRedWeaponSpecialOptions(equipment[slot.id].type, season, preset), savedRow[column.key]);
+        } else {
+          equipment[slot.id][column.key] = normalizeEquipmentSingleOption(column, savedRow[column.key]);
+        }
       } else {
         const value = String(savedRow[column.key] || "");
         equipment[slot.id][column.key] = normalizeEquipmentOptionValue(slot, column, value, season);
@@ -702,6 +823,8 @@ function normalizeEquipment(rawEquipment, season = state?.season || "3") {
       }
     });
     normalizeWeaponAffixShape(equipment[slot.id], "type");
+    applyRedWeaponSpecialAffix(slot, equipment[slot.id], season, preset);
+    applyLowLevelSeaWeaponSpecialAffix(slot, equipment[slot.id]);
     applyUnavailableWeaponAffixes(slot, equipment[slot.id]);
     applyUnavailableSetSpecialAffix(slot, equipment[slot.id]);
     applyRecommendedEquipmentAffixes(equipment[slot.id]);
@@ -736,6 +859,14 @@ function getEquipmentOptions(slot, column, season = state?.season || "3", row = 
   }
   if (column.key === "type") {
     return getSeasonEquipmentTypes(slot, season);
+  }
+
+  if (slot.id === "weapon" && column.key === "specialAffix" && row && isRedWeaponType(row.type)) {
+    return getRedWeaponSpecialOptions(row.type, season);
+  }
+
+  if (slot.id === "weapon" && column.key === "specialAffix" && row && isLowLevelSeaWeaponType(row.type)) {
+    return getLowLevelSeaWeaponSpecialOptions();
   }
 
   let options = EQUIPMENT_OPTIONS[column.optionsKey] || [];
@@ -777,11 +908,142 @@ function isRecommendedAffixLocked(row, column) {
 }
 
 function isEquipmentAffixLocked(slot, column, row) {
-  return isUnavailableSetSpecialAffix(slot, column, row) || isUnavailableWeaponAffix(slot, column, row) || isRecommendedAffixLocked(row, column);
+  return isUnavailableSetSpecialAffix(slot, column, row) || isSeasonLockedWeaponSpecialAffix(slot, column, row) || isLowLevelSeaWeaponSpecialAffix(slot, column, row) || isUnavailableWeaponAffix(slot, column, row) || isRecommendedAffixLocked(row, column);
 }
 
 function isUnavailableSetSpecialAffix(slot, column, row) {
   return slot.id !== "weapon" && column.key === "specialAffix" && isSetEquipmentType(row?.type);
+}
+
+function isSeasonLockedWeaponSpecialAffix(slot, column, row) {
+  return slot.id === "weapon" && column.key === "specialAffix" && ["1", "2"].includes(getActiveSeason()) && (isRedWeaponType(row?.type) || isSeaWeaponType(row?.type));
+}
+
+function isLowLevelSeaWeaponSpecialAffix(slot, column, row) {
+  return slot.id === "weapon" && column.key === "specialAffix" && isLowLevelSeaWeaponType(row?.type);
+}
+
+function getCurrentPresetRedWeaponSpecial(preset = getActivePreset()) {
+  return RED_WEAPON_SPECIAL_BY_PRESET[preset] || "";
+}
+
+function getPresetMainAttribute(presetKey = getActivePreset()) {
+  return PRESETS[presetKey]?.mainAttribute || "";
+}
+
+function getPresetDamageType(presetKey = getActivePreset()) {
+  return PRESETS[presetKey]?.damageType || getActiveDamageType();
+}
+
+function getPresetElementLabel(presetKey = getActivePreset()) {
+  return PRESET_ELEMENT_LABEL_BY_PRESET[presetKey] || "元素";
+}
+
+function getActiveDamageType() {
+  try {
+    return state?.resistanceMode || String(state?.fields?.resistanceCoeff || "0.7");
+  } catch (error) {
+    return "0.7";
+  }
+}
+
+function getS3RedWeaponSpecialBaseOptions(presetKey = getActivePreset()) {
+  const mainAttribute = getPresetMainAttribute(presetKey) || "主属性";
+  const damageLabel = getPresetDamageType(presetKey) === "0.92" ? "魔法" : "物理";
+  const elementLabel = getPresetElementLabel(presetKey);
+  return [
+    `${mainAttribute}+6%`,
+    `${damageLabel}攻击+8%`,
+    `${damageLabel}伤害+8%`,
+    `${elementLabel}加成+8%`
+  ];
+}
+
+function getActiveSeason() {
+  try {
+    return String(state?.season || "3");
+  } catch (error) {
+    return "3";
+  }
+}
+
+function getActivePreset() {
+  try {
+    return state?.preset || "custom";
+  } catch (error) {
+    return "custom";
+  }
+}
+
+function getRedWeaponSpecialOptions(type, season = getActiveSeason(), preset = getActivePreset()) {
+  if (!isRedWeaponType(type)) return EQUIPMENT_OPTIONS.special || [];
+
+  const presetSpecial = getCurrentPresetRedWeaponSpecial(preset);
+  if (String(season) === "3") {
+    const baseOptions = getS3RedWeaponSpecialBaseOptions(preset);
+    return presetSpecial ? [...baseOptions, presetSpecial] : baseOptions;
+  }
+
+  return presetSpecial ? [presetSpecial] : [];
+}
+
+function applyRedWeaponSpecialAffix(slot, row, season = getActiveSeason(), preset = getActivePreset()) {
+  if (slot.id !== "weapon" || !row || !isRedWeaponType(row.type)) return;
+
+  const options = getRedWeaponSpecialOptions(row.type, season, preset);
+  if (["1", "2"].includes(String(season))) {
+    row.specialAffix = options[0] || "";
+    row.specialAffixRank = "";
+    return;
+  }
+
+  if (!options.includes(row.specialAffix)) {
+    row.specialAffix = "";
+  }
+  row.specialAffixRank = "";
+}
+
+function getLowLevelSeaWeaponSpecialOptions() {
+  const recommended = getCurrentRecommendedAffixPair();
+  const attributes = Array.isArray(recommended) ? recommended.slice(0, 2).map(item => `${item}+6%`) : [];
+  return [...attributes, "增效", getCurrentPresetRedWeaponSpecial()].filter(Boolean);
+}
+
+function getSeaWeaponAttributeOptions() {
+  return PANEL_AFFIX_ORDER.map(item => `${item}+6%`);
+}
+
+function getHighLevelSeaWeaponSpecialOptions(index) {
+  if (index === 2) {
+    const presetSpecial = getCurrentPresetRedWeaponSpecial();
+    const redOptions = getS3RedWeaponSpecialBaseOptions();
+    return presetSpecial ? [...redOptions, presetSpecial] : redOptions;
+  }
+
+  return EQUIPMENT_OPTIONS.special || [];
+}
+
+function normalizeHighLevelSeaWeaponSpecialValues(value) {
+  const values = Array.isArray(value) ? value : (value ? [String(value)] : []);
+  const attributeOptions = getSeaWeaponAttributeOptions();
+  const thirdOptions = getHighLevelSeaWeaponSpecialOptions(2);
+  const fourthOptions = getHighLevelSeaWeaponSpecialOptions(3);
+  const firstAttribute = attributeOptions.includes(values[0]) ? values[0] : "";
+  const secondAttribute = attributeOptions.includes(values[1]) && values[1] !== firstAttribute ? values[1] : "";
+
+  return [
+    firstAttribute,
+    secondAttribute,
+    thirdOptions.includes(values[2]) ? values[2] : "",
+    fourthOptions.includes(values[3]) ? values[3] : ""
+  ];
+}
+
+function applyLowLevelSeaWeaponSpecialAffix(slot, row) {
+  if (slot.id !== "weapon" || !row || !isLowLevelSeaWeaponType(row.type)) return;
+
+  row.specialAffix = getLowLevelSeaWeaponSpecialOptions();
+  row.specialAffixRank = "";
 }
 
 function applyUnavailableSetSpecialAffix(slot, row) {
@@ -948,6 +1210,14 @@ function isSeaWeaponType(type) {
   return stripSeasonPrefix(type).endsWith("海");
 }
 
+function isLowLevelSeaWeaponType(type) {
+  return isSeaWeaponType(type) && getEquipmentLevel(type) <= 180;
+}
+
+function isHighLevelSeaWeaponType(type) {
+  return isSeaWeaponType(type) && getEquipmentLevel(type) >= 220;
+}
+
 function stripSeasonPrefix(value) {
   return String(value || "").replace(/^第[一二三]赛季\s*/, "");
 }
@@ -957,7 +1227,13 @@ function normalizeWeaponAffixShape(row, changedField) {
 
   if (isSeaWeaponType(row.type)) {
     if (!Array.isArray(row.specialAffix)) {
-      row.specialAffix = normalizeEquipmentMultiOptions({ optionsKey: "special" }, row.specialAffix);
+      if (isLowLevelSeaWeaponType(row.type)) {
+        row.specialAffix = normalizeEquipmentMultiValues(getLowLevelSeaWeaponSpecialOptions(), row.specialAffix);
+      } else {
+        row.specialAffix = normalizeHighLevelSeaWeaponSpecialValues(row.specialAffix);
+      }
+    } else if (isHighLevelSeaWeaponType(row.type)) {
+      row.specialAffix = normalizeHighLevelSeaWeaponSpecialValues(row.specialAffix);
     }
     row.specialAffix = row.specialAffix.slice(0, 4);
     row.specialAffixRank = "";
@@ -977,12 +1253,20 @@ function normalizeWeaponAffixShape(row, changedField) {
 
 function normalizeEquipmentMultiOptions(column, value) {
   const options = EQUIPMENT_OPTIONS[column.optionsKey] || [];
+  return normalizeEquipmentMultiValues(options, value);
+}
+
+function normalizeEquipmentMultiValues(options, value) {
   const values = Array.isArray(value) ? value : (value ? [String(value)] : []);
   return values.filter(item => options.includes(item));
 }
 
 function normalizeEquipmentSingleOption(column, value) {
   const options = EQUIPMENT_OPTIONS[column.optionsKey] || [];
+  return normalizeEquipmentSingleValue(options, value);
+}
+
+function normalizeEquipmentSingleValue(options, value) {
   const text = Array.isArray(value) ? String(value[0] || "") : String(value || "");
   return options.includes(text) ? text : "";
 }
@@ -1038,8 +1322,8 @@ function saveState() {
 function isOldDefaultPanelFormula(item) {
   return (
     item.format === "percent" &&
-    ((item.id === "critPanel" && item.formula === "critPercent") ||
-      (item.id === "luckPanel" && item.formula === "luckPercent"))
+    ((item.id === "critPanel" && item.formula === "critPct") ||
+      (item.id === "luckPanel" && item.formula === "luckPct"))
   );
 }
 
@@ -1065,6 +1349,10 @@ function renderInputSections() {
 }
 
 function renderField(field) {
+  if (field.id === "mainAttribute") {
+    return "";
+  }
+
   const value = state.fields[field.id] ?? field.value;
   const label = getFieldLabel(field);
   if (field.type === "select") {
@@ -1134,7 +1422,7 @@ function renderEquipmentField(slot, column, row) {
     : "";
 
   return `
-    <label class="equipment-field${wideClass}">
+    <label class="equipment-field equipment-field-${escapeAttr(column.key)}${wideClass}">
       <span>${escapeHtml(column.label)}</span>
       ${renderEquipmentControl(slot, column, row)}
     </label>
@@ -1147,18 +1435,27 @@ function renderEquipmentControl(slot, column, row) {
   }
 
   if (isWeaponSpecialColumn(slot, column)) {
+    const locked = isEquipmentAffixLocked(slot, column, row);
     if (isSeaWeaponType(row.type)) {
-      return renderEquipmentDropdownMultiSelect(slot, column, row[column.key] || []);
+      if (isLowLevelSeaWeaponType(row.type)) {
+        return renderLockedSeaWeaponSpecialAffixes(row[column.key] || []);
+      }
+
+      if (isHighLevelSeaWeaponType(row.type)) {
+        return renderHighLevelSeaWeaponSpecialAffixes(slot, column, row[column.key] || [], locked);
+      }
+
+      return renderEquipmentDropdownMultiSelect(slot, column, row[column.key] || [], locked);
     }
 
     if (isRedWeaponType(row.type)) {
-      return renderEquipmentSelect(slot, column, column.key, row[column.key] || "", "equipment-select-full");
+      return renderEquipmentSelect(slot, column, column.key, row[column.key] || "", "equipment-select-full", locked, row);
     }
 
     return `
-      <div class="equipment-pair">
-        ${renderEquipmentSelect(slot, column, column.key, row[column.key] || "", "equipment-select-long", false, row)}
-        ${renderEquipmentShortSelect(slot, column, row[column.shortKey] || "")}
+      <div class="equipment-pair${locked ? " equipment-pair-locked" : ""}">
+        ${renderEquipmentSelect(slot, column, column.key, row[column.key] || "", "equipment-select-long", locked, row)}
+        ${renderEquipmentShortSelect(slot, column, row[column.shortKey] || "", locked)}
       </div>
     `;
   }
@@ -1198,20 +1495,85 @@ function renderEquipmentAffixValue(slot, column, row) {
   return `<div class="equipment-value${hasValue ? "" : " equipment-value-empty"}" title="${escapeAttr(display)}">${escapeHtml(display)}</div>`;
 }
 
-function renderEquipmentDropdownMultiSelect(slot, column, selectedValues) {
+function renderLockedSeaWeaponSpecialAffixes(values) {
+  const items = Array.isArray(values) ? values : [];
+  return `
+    <div class="equipment-sea-specials">
+      <div class="equipment-locked-specials">
+        ${items.slice(0, 2).map(item => `<div class="equipment-locked-special" title="${escapeAttr(item)}">${escapeHtml(item)}</div>`).join("")}
+      </div>
+      ${items.slice(2, 4).map(item => `
+        <div class="equipment-sea-select-wrap equipment-sea-select-locked">
+          <div class="equipment-sea-select-display" title="${escapeAttr(item)}">${escapeHtml(item)}</div>
+        </div>
+      `).join("")}
+    </div>
+  `;
+}
+
+function renderHighLevelSeaWeaponSpecialAffixes(slot, column, values, disabled = false) {
+  const normalizedValues = normalizeHighLevelSeaWeaponSpecialValues(values);
+  return `
+    <div class="equipment-sea-specials">
+      <div class="equipment-sea-attribute-row">
+        ${renderSeaWeaponAttributeSelect(slot, column, 0, normalizedValues)}
+        ${renderSeaWeaponAttributeSelect(slot, column, 1, normalizedValues)}
+      </div>
+      ${renderSeaWeaponSpecialSelect(slot, column, 2, normalizedValues, disabled)}
+      ${renderSeaWeaponSpecialSelect(slot, column, 3, normalizedValues, disabled)}
+    </div>
+  `;
+}
+
+function renderSeaWeaponAttributeSelect(slot, column, index, values) {
+  const selectedValue = values[index] || "";
+  const otherValue = values[index === 0 ? 1 : 0] || "";
+  const options = getSeaWeaponAttributeOptions().filter(option => option === selectedValue || option !== otherValue);
+  return `
+    <div class="equipment-sea-attribute-wrap">
+      <select class="equipment-sea-attribute-select" data-equipment-slot="${escapeAttr(slot.id)}" data-equipment-field="${escapeAttr(column.key)}" data-equipment-index="${index}" aria-label="${escapeAttr(`${slot.label}${column.label}属性${index + 1}`)}">
+        <option value="">未选择</option>
+        ${options.map(option => `
+          <option value="${escapeAttr(option)}" ${option === selectedValue ? "selected" : ""}>${escapeHtml(option)}</option>
+        `).join("")}
+      </select>
+      <div class="equipment-sea-attribute-display" title="${escapeAttr(selectedValue || "未选择")}">${escapeHtml(selectedValue || "未选择")}</div>
+    </div>
+  `;
+}
+
+function renderSeaWeaponSpecialSelect(slot, column, index, values, disabled = false) {
+  const selectedValue = values[index] || "";
+  const options = getHighLevelSeaWeaponSpecialOptions(index);
+  const disabledAttr = disabled ? " disabled" : "";
+  return `
+    <div class="equipment-sea-select-wrap">
+      <select class="equipment-sea-special-select" data-equipment-slot="${escapeAttr(slot.id)}" data-equipment-field="${escapeAttr(column.key)}" data-equipment-index="${index}" aria-label="${escapeAttr(`${slot.label}${column.label}${index - 1}`)}"${disabledAttr}>
+        <option value="">未选择</option>
+        ${options.map(option => `
+          <option value="${escapeAttr(option)}" ${option === selectedValue ? "selected" : ""}>${escapeHtml(option)}</option>
+        `).join("")}
+      </select>
+      <div class="equipment-sea-select-display" title="${escapeAttr(selectedValue || "未选择")}">${escapeHtml(selectedValue || "未选择")}</div>
+    </div>
+  `;
+}
+
+function renderEquipmentDropdownMultiSelect(slot, column, selectedValues, disabled = false) {
   const options = getEquipmentOptions(slot, column);
   const selected = new Set(Array.isArray(selectedValues) ? selectedValues : []);
   const displayValues = Array.from(selected).map(value => formatEquipmentOptionLabel(slot, column, value));
   const label = displayValues.length ? displayValues.join("\n") : "未选择";
   const title = displayValues.length ? displayValues.join("、") : "未选择";
+  const disabledAttr = disabled ? " disabled" : "";
 
   return `
-    <div class="equipment-multi-dropdown">
-      <button type="button" class="equipment-multi-toggle" data-equipment-multi-toggle="${escapeAttr(slot.id)}-${escapeAttr(column.key)}" title="${escapeAttr(title)}">${escapeHtml(label)}</button>
+    <div class="equipment-multi-dropdown${disabled ? " equipment-pair-locked" : ""}">
+      <button type="button" class="equipment-multi-toggle" data-equipment-multi-toggle="${escapeAttr(slot.id)}-${escapeAttr(column.key)}" title="${escapeAttr(title)}"${disabledAttr}>${escapeHtml(label)}</button>
       <div class="equipment-multi-menu">
         ${options.map(option => `
           <label class="equipment-multi-option">
-            <input type="checkbox" value="${escapeAttr(option)}" ${selected.has(option) ? "checked" : ""} data-equipment-slot="${escapeAttr(slot.id)}" data-equipment-field="${escapeAttr(column.key)}" data-equipment-multi-option>
+            <input type="checkbox" value="${escapeAttr(option)}" ${selected.has(option) ? "checked" : ""}${disabledAttr} data-equipment-slot="${escapeAttr(slot.id)}" data-equipment-field="${escapeAttr(column.key)}" data-equipment-multi-option>
             <span>${escapeHtml(formatEquipmentOptionLabel(slot, column, option))}</span>
           </label>
         `).join("")}
@@ -1359,7 +1721,7 @@ function calculate() {
     }
   });
 
-  renderResults(results);
+  renderResults(results, context);
   renderPanelAttributes(context);
   renderVariables(context);
   calcStatusEl.textContent = errors ? `${errors} 个公式异常` : "已更新";
@@ -1385,15 +1747,15 @@ function buildContext() {
 
   const constants = SEASON_CONSTANTS[state.season] || SEASON_CONSTANTS[3];
   context.ratingConstant = constants.rating;
-  context.allPowerConstant = constants.allPower;
+  context.versatilityConstant = constants.versatility;
   context.elementConstant = constants.element;
 
-  context.critPercent = ratingToPercent(context.critRating, constants.rating) + 0.05;
-  context.hastePercent = ratingToPercent(context.hasteRating, constants.rating);
-  context.luckPercent = ratingToPercent(context.luckRating, constants.rating) + 0.05;
-  context.masteryPercent = ratingToPercent(context.masteryRating, constants.rating) + 0.06;
-  context.allPowerPercent = ratingToPercent(context.allPowerRating, constants.allPower);
-  context.allPowerTotal = context.allPowerPercent + context.allPowerBonus;
+  context.critPct = ratingToPercent(context.crit, constants.rating) + 0.05;
+  context.hastePct = ratingToPercent(context.haste, constants.rating);
+  context.luckPct = ratingToPercent(context.luck, constants.rating) + 0.05;
+  context.masteryPct = ratingToPercent(context.mastery, constants.rating) + 0.06;
+  context.versatilityPct = ratingToPercent(context.versatility, constants.versatility);
+  context.versatilityTotal = context.versatilityPct + context.versatilityBonus;
   context.singleElementFixedPercent = ratingToPercent(context.singleElementFixed, constants.element);
   context.allElementFixedPercent = ratingToPercent(context.allElementFixed, constants.element);
   context.physMagicFixedPercent = ratingToPercent(context.physMagicFixed, constants.element);
@@ -1406,18 +1768,18 @@ function buildContext() {
   context.generalMultiplier = 1 + context.generalBonusTotal;
   context.elementBonusTotal = context.singleElementFixedPercent + context.singleElementBonus + context.allElementFixedPercent + context.allElementBonus;
   context.elementMultiplier = 1 + context.elementBonusTotal;
-  context.allPowerMultiplier = 1 + context.allPowerTotal * 0.35;
-  context.critMultiplier = 1 + context.critPercent * context.critExtraMultiplier;
+  context.versatilityMultiplier = 1 + context.versatilityTotal * 0.35;
+  context.critMultiplier = 1 + context.critPct * context.critExtraMultiplier;
   context.finalMultiplier = 1 + context.finalDamageBonus;
   context.physMagicMultiplier = 1 + context.physMagicFixedPercent + context.physMagicBonus;
   context.seasonDamageMultiplier = 1 + context.seasonDamageBonus;
   context.seasonSuppressMultiplier = 1 + clamp(context.seasonSuppressBonus, 0, 0.2);
-  context.luckyMultiplier = context.luckyBaseMultiplier + 0.25 * context.luckPercent;
-  context.luckyGeneralMultiplier = 1 + context.luckPercent + context.luckyDamageBonus + context.rangeSkillBonus + context.generalDamageBonus + context.specialSkillBonus + context.vulnerableBonus + context.otherDamageBonus;
-  context.luckyEffectGeneralMultiplier = 1 + context.luckPercent + context.luckyDamageBonus + context.generalDamageBonus + context.specialSkillBonus + context.vulnerableBonus + context.otherDamageBonus;
-  context.luckyHitDamage = (context.panelAttack + context.refinedAttack + context.elementAttack) * context.luckyMultiplier * context.luckyGeneralMultiplier * context.elementMultiplier * context.allPowerMultiplier * context.critMultiplier * context.physMagicMultiplier * context.finalMultiplier * context.seasonDamageMultiplier * context.seasonSuppressMultiplier;
-  context.luckyExpectedDamage = context.luckPercent * context.luckyHitDamage;
-  context.otherLuckyEffectDamage = context.attackZone * context.luckyEffectRate * context.luckyEffectGeneralMultiplier * context.elementMultiplier * context.allPowerMultiplier * context.critMultiplier * context.physMagicMultiplier * context.finalMultiplier * context.seasonDamageMultiplier * context.seasonSuppressMultiplier;
+  context.luckyMultiplier = context.luckyBaseMultiplier + 0.25 * context.luckPct;
+  context.luckyGeneralMultiplier = 1 + context.luckPct + context.luckyDamageBonus + context.rangeSkillBonus + context.generalDamageBonus + context.specialSkillBonus + context.vulnerableBonus + context.otherDamageBonus;
+  context.luckyEffectGeneralMultiplier = 1 + context.luckPct + context.luckyDamageBonus + context.generalDamageBonus + context.specialSkillBonus + context.vulnerableBonus + context.otherDamageBonus;
+  context.luckyHitDamage = (context.panelAttack + context.refinedAttack + context.elementAttack) * context.luckyMultiplier * context.luckyGeneralMultiplier * context.elementMultiplier * context.versatilityMultiplier * context.critMultiplier * context.physMagicMultiplier * context.finalMultiplier * context.seasonDamageMultiplier * context.seasonSuppressMultiplier;
+  context.luckyExpectedDamage = context.luckPct * context.luckyHitDamage;
+  context.otherLuckyEffectDamage = context.attackZone * context.luckyEffectRate * context.luckyEffectGeneralMultiplier * context.elementMultiplier * context.versatilityMultiplier * context.critMultiplier * context.physMagicMultiplier * context.finalMultiplier * context.seasonDamageMultiplier * context.seasonSuppressMultiplier;
 
   return context;
 }
@@ -1427,6 +1789,8 @@ function addEquipmentContext(context) {
     const slot = EQUIPMENT_SLOTS.find(item => item.id === slotId) || { id: slotId };
     const values = getEquipmentTypeValues(slot, row);
     if (!values) return;
+
+    addContextValue(context, "mainAttribute", values.mainAttribute);
 
     ["majorAffix", "minorAffix", "reforgeAffix"].forEach(columnKey => {
       const affixName = row?.[columnKey];
@@ -1447,15 +1811,21 @@ function addContextValue(context, key, value) {
   context[key] = (Number(context[key]) || 0) + number;
 }
 
-function renderResults(results) {
+function renderResults(results, context) {
   const skillDamage = results.find(item => item.id === "skillDamage") || results[0];
   const display = skillDamage ? skillDamage.display : formatNumber(0);
   const isError = Boolean(skillDamage?.error);
+  const mainAttributeLabel = getCurrentMainAttribute() === "自定义" ? "主属性" : getCurrentMainAttribute();
+  const mainAttributeDisplay = formatNumber(context.mainAttribute || 0);
 
   primaryResultsEl.innerHTML = `
     <div class="metric primary skill-damage-metric">
       <span title="当前技能伤害">当前技能伤害</span>
       <strong class="${isError ? "error-text" : ""}" title="${escapeHtml(display)}">${escapeHtml(display)}</strong>
+    </div>
+    <div class="metric compact-metric">
+      <span title="${escapeHtml(mainAttributeLabel)}">${escapeHtml(mainAttributeLabel)}</span>
+      <strong title="${escapeHtml(mainAttributeDisplay)}">${escapeHtml(mainAttributeDisplay)}</strong>
     </div>
   `;
 }
