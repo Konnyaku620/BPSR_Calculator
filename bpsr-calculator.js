@@ -373,11 +373,55 @@ const RED_WEAPON_SPECIAL_BY_PRESET = {
   verdant_oracle_heal: "治疗强度+5%",
   verdant_oracle_punish: "远距离伤害+8%",
   wind_knight_heavy: "近距离伤害+8%",
-  wind_knight_air: "幸运一击倍率+20%",
+  wind_knight_air: "幸运一击伤害倍率+20%",
   heavy_guardian_rockshield: "护盾强度+8%",
   heavy_guardian_block: "幸运+6%",
   frost_mage_ice_spear: "暴击伤害+15%",
-  frost_mage_ray: "远距离伤害+8%"
+  frost_mage_ray: "远距离伤害+8%",
+  twin_striker_formless: "幸运一击伤害倍率+20%",
+  twin_striker_crimson: "暴击伤害+15%"
+};
+const SEA_WEAPON_ENHANCE_BY_PRESET = {
+  stormblade_iai: "消耗雷之印的技能提升5%物理增效",
+  wind_knight_air: "风姿卓绝期间提升6%物理增效",
+  wind_knight_heavy: "风姿卓绝期间提升6%物理增效",
+  verdant_oracle_heal: "治疗型专精技能提升10%魔法增效",
+  verdant_oracle_punish: "伤害型专精技能提升8.5%魔法增效",
+  heavy_guardian_block: "格挡冲击状态下提升4.5%物理增效",
+  heavy_guardian_rockshield: "激怒状态下提升4.5%物理增效",
+  shield_knight_lightshield: "拥有光铸屏障时提升4.5%物理增效",
+  shield_knight_guard: "英勇盾击状态下提升4.5%物理增效",
+  beat_performer_concerto: "开启鸣奏·愈合乐章期间提升5.5%魔法增效"
+};
+const S3_SEA_WEAPON_THIRD_SPECIAL_BY_PRESET = {
+  wind_knight_heavy: "暴击伤害+15%",
+  frost_mage_ray: "施法速度+10%",
+  marksman_beast: "暴击伤害+15%",
+  shield_knight_guard: "物理防御+15%",
+  heavy_guardian_rockshield: "护盾强度+15%",
+  shield_knight_lightshield: "生命上限+15%",
+  verdant_oracle_punish: "幸运一击伤害+15%",
+  verdant_oracle_heal: "治疗强度+10%"
+};
+const S3_SEA_WEAPON_FOURTH_SPECIAL_BY_PRESET = {
+  twin_striker_formless: ["物理增效+4%", "幸运一击提升5%物理增效", "荒川之寂灭期间提升5%物理增效"],
+  twin_striker_crimson: ["物理增效+4%", "伤害类型专精技能提升5%物理增效", "无尽之炎魔期间提升5%物理增效"],
+  stormblade_iai: ["物理增效+4%", "消耗雷之印的技能提升5%物理增效", "无穷雷霆之力期间提升6%物理增效"],
+  stormblade_moonblade: ["物理增效+4%", "伤害型专精技能提升5%物理增效", "千雷闪影之意期间提升6%物理增效"],
+  frost_mage_ice_spear: ["魔法增效+4%", "冰之灌注期间提升6%魔法增效", "幸运一击提升6%魔法增效"],
+  frost_mage_ray: ["魔法增效+4%", "冰之灌注期间提升6%魔法增效", "持续伤害提升6%魔法增效"],
+  wind_knight_heavy: ["物理增效+4%", "风姿卓绝期间提升6%物理增效", "伤害型专精技能提升5%物理增效"],
+  wind_knight_air: ["物理增效+4%", "风姿卓绝期间提升6%物理增效", "幸运一击提升6%物理增效"],
+  marksman_beast: ["物理增效+4%", "精神凝聚期间提升6%物理增效", "宠物造成的伤害提升5%物理增效"],
+  marksman_eagle: ["物理增效+4%", "精神凝聚期间提升6%物理增效", "猎鹰出击物理增效提升6%"],
+  heavy_guardian_rockshield: ["物理增效+4%", "魔法削减+6%", "激怒状态下提升8%物理增效"],
+  heavy_guardian_block: ["物理增效+4%", "魔法削减+6%", "格挡冲击状态下提升8%物理增效"],
+  shield_knight_guard: ["物理增效+4%", "魔法削减+6%", "英勇盾击状态下提升8%物理增效"],
+  shield_knight_lightshield: ["物理增效+4%", "魔法削减+6%", "拥有光铸屏障时提升8%物理增效"],
+  verdant_oracle_punish: ["魔法增效+4%", "灌注期间提升6%魔法增效", "幸运效果提升6%魔法增效"],
+  verdant_oracle_heal: ["魔法增效+4%", "鼓舞效果提升10%", "治疗型技能提升8%魔法增效"],
+  beat_performer_crazy: ["魔法增效+4%", "幸运效果提升6%魔法增效", "主动施放安可后，20秒内提升6%魔法增效"],
+  beat_performer_concerto: ["魔法增效+4%", "开启鸣奏·愈合乐章期间提升8%智力", "治疗型技能提升8%魔法增效"]
 };
 const PRESET_ELEMENT_LABEL_BY_PRESET = {
   frost_mage_ice_spear: "冰元素",
@@ -861,6 +905,10 @@ function getEquipmentOptions(slot, column, season = state?.season || "3", row = 
     return getSeasonEquipmentTypes(slot, season);
   }
 
+  if (column.key === "specialAffix" && !row?.type) {
+    return [];
+  }
+
   if (slot.id === "weapon" && column.key === "specialAffix" && row && isRedWeaponType(row.type)) {
     return getRedWeaponSpecialOptions(row.type, season);
   }
@@ -925,6 +973,14 @@ function isLowLevelSeaWeaponSpecialAffix(slot, column, row) {
 
 function getCurrentPresetRedWeaponSpecial(preset = getActivePreset()) {
   return RED_WEAPON_SPECIAL_BY_PRESET[preset] || "";
+}
+
+function getCurrentPresetSeaWeaponEnhance(preset = getActivePreset()) {
+  if (SEA_WEAPON_ENHANCE_BY_PRESET[preset]) {
+    return SEA_WEAPON_ENHANCE_BY_PRESET[preset];
+  }
+
+  return getPresetDamageType(preset) === "0.92" ? "魔法增效+4%" : "物理增效+4%";
 }
 
 function getPresetMainAttribute(presetKey = getActivePreset()) {
@@ -1004,9 +1060,7 @@ function applyRedWeaponSpecialAffix(slot, row, season = getActiveSeason(), prese
 }
 
 function getLowLevelSeaWeaponSpecialOptions() {
-  const recommended = getCurrentRecommendedAffixPair();
-  const attributes = Array.isArray(recommended) ? recommended.slice(0, 2).map(item => `${item}+6%`) : [];
-  return [...attributes, "增效", getCurrentPresetRedWeaponSpecial()].filter(Boolean);
+  return [getCurrentPresetSeaWeaponEnhance(), getCurrentPresetRedWeaponSpecial()].filter(Boolean);
 }
 
 function getSeaWeaponAttributeOptions() {
@@ -1015,12 +1069,16 @@ function getSeaWeaponAttributeOptions() {
 
 function getHighLevelSeaWeaponSpecialOptions(index) {
   if (index === 2) {
-    const presetSpecial = getCurrentPresetRedWeaponSpecial();
-    const redOptions = getS3RedWeaponSpecialBaseOptions();
-    return presetSpecial ? [...redOptions, presetSpecial] : redOptions;
+    const preset = getActivePreset();
+    const thirdSpecial = S3_SEA_WEAPON_THIRD_SPECIAL_BY_PRESET[preset] || getCurrentPresetRedWeaponSpecial(preset);
+    return [...getS3RedWeaponSpecialBaseOptions(preset), thirdSpecial].filter(Boolean);
   }
 
-  return EQUIPMENT_OPTIONS.special || [];
+  if (index === 3) {
+    return S3_SEA_WEAPON_FOURTH_SPECIAL_BY_PRESET[getActivePreset()] || [];
+  }
+
+  return [];
 }
 
 function normalizeHighLevelSeaWeaponSpecialValues(value) {
@@ -1139,7 +1197,7 @@ function getSeasonEquipmentTypes(slot, season = state?.season || "3") {
 
   let options = EQUIPMENT_OPTIONS.type || [];
   if (seasonPrefix) {
-    options = options.filter(option => option === "自定义" || option.startsWith(seasonPrefix));
+    options = options.filter(option => option.startsWith(seasonPrefix));
   }
   if (NO_SET_EQUIPMENT_SLOT_IDS.has(slot.id)) {
     options = options.filter(option => !stripSeasonPrefix(option).includes("套装"));
@@ -1160,8 +1218,6 @@ function getSeasonWeaponTypes(season = state?.season || "3") {
   }[season];
 
   return (EQUIPMENT_OPTIONS.weaponType || []).filter(option => {
-    if (option === "自定义") return true;
-
     if (isSeaWeaponType(option)) {
       return getEquipmentLevel(option) <= seaLimit;
     }
